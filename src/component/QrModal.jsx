@@ -54,7 +54,7 @@
 //         console.log("decoded qr code:", result);
 //         setStudents([result.data]);
 //         console.log({students});
-      
+
 //         if (students?.length ) {
 //           const isExist = students?.find(value === result.data);
 //           console.log(isExist);
@@ -99,16 +99,73 @@
 
 // export default QRScanner;
 
+// import React, { useEffect, useRef, useState } from "react";
+// import QrScanner from "qr-scanner";
+
+// const QRScanner = () => {
+//   const videoElementRef = useRef(null);
+//   const [students, setStudents] = useState([]);
+
+//   useEffect(() => {
+//     const video = videoElementRef.current;
+//     const qrScanner = new QrScanner(
+//       video,
+//       (result) => {
+//         console.log("decoded qr code:", result);
+
+//         // Check if the student already exists in the list
+//         const isExist = students.some((student) => student === result.data);
+//         if (!isExist) {
+//           setStudents((prevStudents) => [...prevStudents, result.data]);
+//         } else {
+//           alert("Already exists");
+//         }
+//       },
+//       {
+//         returnDetailedScanResult: true,
+//         highlightScanRegion: true,
+//         highlightCodeOutline: true,
+//       }
+//     );
+
+//     qrScanner.start();
+
+//     return () => {
+//       qrScanner.stop();
+//       qrScanner.destroy();
+//     };
+//   }, [students]);
+
+//   return (
+//     <div>
+//       <h1>Custom QR Code Scanner</h1>
+//       <div className="videoWrapper">
+//         <video className="qrVideo" ref={videoElementRef} />
+//       </div>
+//       <ul>
+//         {students.map((student, index) => (
+//           <li key={index}>{student}</li>
+//         ))}
+//       </ul>
+//     </div>
+//   );
+// };
+
+// export default QRScanner;
+
+// ahmed code
+
 import React, { useEffect, useRef, useState } from "react";
 import QrScanner from "qr-scanner";
 
 const QRScanner = () => {
   const videoElementRef = useRef(null);
   const [students, setStudents] = useState([]);
+  const qrScannerRef = useRef(null);
 
   useEffect(() => {
     const video = videoElementRef.current;
-    const qrScanner = new QrScanner(
+    qrScannerRef.current = new QrScanner(
       video,
       (result) => {
         console.log("decoded qr code:", result);
@@ -120,6 +177,10 @@ const QRScanner = () => {
         } else {
           alert("Already exists");
         }
+
+        // Restart the scanner
+        qrScannerRef.current.stop();
+        qrScannerRef.current.start();
       },
       {
         returnDetailedScanResult: true,
@@ -128,18 +189,18 @@ const QRScanner = () => {
       }
     );
 
-    qrScanner.start();
+    qrScannerRef.current.start();
 
     return () => {
-      qrScanner.stop();
-      qrScanner.destroy();
+      qrScannerRef.current.stop();
+      qrScannerRef.current.destroy();
     };
   }, [students]);
-
+  console.log("students-->", students);
   return (
     <div>
       <h1>Custom QR Code Scanner</h1>
-      <div className="videoWrapper">
+      <div className="videoWrapper w-[400px] h-[200px] mx-auto my-10">
         <video className="qrVideo" ref={videoElementRef} />
       </div>
       <ul>
