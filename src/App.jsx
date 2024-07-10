@@ -1,19 +1,23 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import AttendanceReport from './component/AttendanceReport.jsx'
+import { useState } from "react";
+import "./App.css";
+import AttendanceReport from "./component/AttendanceReport.jsx";
+import QRScanner from "./component/QrModal.jsx";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [students, setStudents] = useState([]);
+
+  const handleScannedStudents = (scannedStudents) => {
+    setStudents(scannedStudents);
+  };
 
   return (
     <>
-     <div className='bg-red-50'>
-      <AttendanceReport />
+      <div className="bg-red-50">
+        <QRScanner onScannedStudentsChange={handleScannedStudents} />
+        <AttendanceReport scannedStudents={students} />
       </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
